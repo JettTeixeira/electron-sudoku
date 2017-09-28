@@ -33,14 +33,14 @@ A new type of sudoku where the computer wants to lose you.
   - Block-up Timer: 1 minute
   - Block-up Power Duration: 30 seconds
   - Clues: 30
-  - The grid errors will be displayed
+  - Grid errors: Hidden
 
 - **Hard:**
   - Global Timer: 20 minutes
   - Block-up Timer: 30 seconds
   - Block-up Power Duration: 30 seconds
   - Clues: 30
-  - The grid errors will be displayed
+  - Grid errors: Hidden
 
 
 ## Installation
