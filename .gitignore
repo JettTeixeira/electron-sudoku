@@ -22,3 +22,5 @@ yarn-error.log*
 
 # Builds
 release-builds/
+
+package-lock.json
