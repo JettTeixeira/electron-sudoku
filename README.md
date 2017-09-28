@@ -8,16 +8,40 @@ A new type of sudoku where the computer wants to lose you.
 - You must set numbers 1 to 9 in the empty squares.
 - Numbers can only be once in each row and column. At the same way, we have boxes 3x3 who contains the same numbers only once.
 - Well, the computer doesn't wanna play, because it always wins. That's why it has put two timers:
--- Global Timer: If you solve the sudoku before it reaches zero you win.
--- Block-up Timer: When it reaches zero, the computer will do something that will work against you.
+  - Global Timer: If you solve the sudoku before it reaches zero you win.
+  - Block-up Timer: When it reaches zero, the computer will do something that will work against you.
 
 ## Computer Movements
 
-- **Block Number:** Select a random number and you can't use it until the next computer movement.
+- **Block Number:** Select a random number and you can't use it until some time.
 - **Delete Number:** Remove a random number on your grid. This does not include the numbers that come by default
-- **Blind Screen:** A section of the grid will be covered until the next computer movement. If you remember where to set the numbers you can do it.
+- **Blind Screen:** A section of the grid will be covered until some time. If you remember where to set the numbers you can do it.
 - **Fake It:** A random number will change it. This does not include the numbers that come by default.
 - **My turn:** The computer will set a random number in random blank cell.
+
+## Dificulties
+
+- **Easy:**
+  - Global Timer: 20 minutes
+  - Block-up Timer: 1 minute
+  - Block-up Power Duration: 15 seconds
+  - Clues: 40
+  - Grid errors: Displayed
+
+- **Normal:**
+  - Global Timer: 10 minutes
+  - Block-up Timer: 1 minute
+  - Block-up Power Duration: 30 seconds
+  - Clues: 30
+  - The grid errors will be displayed
+
+- **Hard:**
+  - Global Timer: 20 minutes
+  - Block-up Timer: 30 seconds
+  - Block-up Power Duration: 30 seconds
+  - Clues: 30
+  - The grid errors will be displayed
+
 
 ## Installation
 
