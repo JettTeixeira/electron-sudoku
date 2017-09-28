@@ -1,0 +1,30 @@
+{
+  "name": "electron-sudoku",
+  "version": "1.0.0",
+  "description": "Sudoku game with electron",
+  "main": "app.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "npm run package-osx && npm run package-win && npm run package-linux",
+    "package-osx": "electron-packager . sudoku_o --overwrite --platform=darwin --arch=x64 --prune=true --out=release-builds",
+    "package-win": "electron-packager . sudoku_w --overwrite --asar=true --platform=win32  --prune=true --out=release-builds",
+    "package-linux": "electron-packager . sudoku_l --overwrite --platform=linux --arch=x64 --prune=true --out=release-builds"
+  },
+  "repository": "https://github.com/JettTeixeira/electron-sudoku.git",
+  "keywords": [
+    "electron",
+    "sudoku",
+    "game",
+    "human-vs-computer"
+  ],
+  "contributors": [
+    "Leonardo Alfaro Carrasco",
+    "Luis Callo Milla",
+    "Jett Teixeira Walters <jett.twalters@gmail.com>"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "1.7.8",
+    "electron-packager": "^9.1.0"
+  }
+}
