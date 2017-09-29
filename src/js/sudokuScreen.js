@@ -25,6 +25,10 @@ class SudokuScreen {
             for (let c = 0; c < 9; ++c) {
 
                 let sudokuNumber = new SudokuNumber(177+c*50,72+r*50,48,48);
+
+                sudokuNumber.onMouseUp = () => {
+                    sudokuNumber.setValue(this.currentNumber);
+                }
                 
                 row.push(sudokuNumber);
             }
@@ -38,10 +42,10 @@ class SudokuScreen {
 
         for (let i = 0; i < 9; ++i) {
             
-            let numberBtn = new CanvasButton(177+i*50,540,40,40,String(i+1), "Tahoma 15px");
+            let numberBtn = new CanvasButton(177+i*50,540,40,40,i+1, "Tahoma 15px");
 
             numberBtn.onMouseUp = () => {
-                this.currentNumber = numberBtn.value;
+                this.currentNumber = numberBtn.text;
             };
 
             this.numbersBtn.push(numberBtn);
@@ -125,5 +129,7 @@ class SudokuScreen {
     handleEvent(event, x, y) {
 
         this.numbersBtn.forEach(e => e.handleEvent(event, x, y));
+
+        this.grid.forEach(r => r.forEach(e => e.handleEvent(event, x, y)));
     }    
 }
