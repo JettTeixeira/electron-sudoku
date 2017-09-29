@@ -8,8 +8,44 @@ class SudokuScreen {
      */
     constructor() {
 
-        this.grid = Array(9).fill(0).map(() => Array(9).fill(0).map(() => new SudokuNumber()));
-        
+        this.grid = [];
+        this.numbersBtn = [];
+        this.currentNumber = 0;
+
+        this.generateGrid();
+        this.generateNumbers();
+    }
+
+    generateGrid() {
+
+        for (let r = 0; r < 9; ++r) {
+            
+            let row = [];
+
+            for (let c = 0; c < 9; ++c) {
+
+                let sudokuNumber = new SudokuNumber(177+c*50,72+r*50,48,48);
+                
+                row.push(sudokuNumber);
+            }
+
+            this.grid.push(row);
+        }
+
+    }
+
+    generateNumbers() {
+
+        for (let i = 0; i < 9; ++i) {
+            
+            let numberBtn = new CanvasButton(177+i*50,540,40,40,String(i+1), "Tahoma 15px");
+
+            numberBtn.onMouseUp = () => {
+                this.currentNumber = numberBtn.value;
+            };
+
+            this.numbersBtn.push(numberBtn);
+        }
     }
 
     /**
@@ -51,23 +87,14 @@ class SudokuScreen {
     //TODO: drawChess must delete! 
     draw(canvasCtx) {
         
-        this.drawChess(canvasCtx, 10, 10);
-    }
-
-    /** TODO: must delete ^^
-     * Draw the chess in canvas
-     * @param {Object} canvasCtx Canvas context object
-     */
-    drawChess(canvasCtx, x, y) {
-
         // Draw grey lines (all grid)
         canvasCtx.fillStyle = "#AAAAAA";
         canvasCtx.beginPath();
 
         for (let i = 0; i < 10; ++i) {
 
-            canvasCtx.rect(x+__cellSize*i,y,2,this.grid.length*50);
-            canvasCtx.rect(x,y+__cellSize*i,this.grid.length*50,2);
+            canvasCtx.rect(175+__cellSize*i,70,2,this.grid.length*50);
+            canvasCtx.rect(175,70+__cellSize*i,this.grid.length*50,2);
         }
 
         // End draw
@@ -81,28 +108,22 @@ class SudokuScreen {
         for (let i = 0; i < 10; i+=3) {
 
             // Horizontal
-            canvasCtx.rect(x+__cellSize*i,y,2,this.grid.length*50+2);
+            canvasCtx.rect(175+__cellSize*i,70,2,this.grid.length*50+2);
 
             // Vertical
-            canvasCtx.rect(x,y+__cellSize*i,this.grid.length*50+2,2);
+            canvasCtx.rect(175,70+__cellSize*i,this.grid.length*50+2,2);
         }
 
         // End draw
         canvasCtx.fill();
 
-        // Draw all cells
-        for (let r = 0; r < this.grid.length; ++r)
-            for (let c = 0; c < this.grid.length; ++c)
-                this.drawCell(canvasCtx, r, c, x, y);
-    }
+        this.grid.forEach(r => r.forEach(e => e.draw(canvasCtx)));
 
-    drawCell(canvasCtx, row, col, x, y) {
-
-        // +2 x border!
-        this.grid[row][col].draw(canvasCtx, x + col * __cellSize + 2, y + row * __cellSize + 2);
+        this.numbersBtn.forEach(e => e.draw(canvasCtx));
     }
 
     handleEvent(event, x, y) {
 
+        this.numbersBtn.forEach(e => e.handleEvent(event, x, y));
     }    
 }

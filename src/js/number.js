@@ -1,7 +1,8 @@
 
-class SudokuNumber {
+class SudokuNumber extends CanvasObject {
 
-    constructor(value = 0) {
+    constructor(x, y, width, height, value = 0) {
+        super(x, y, width, height);
         this.value = value;
         this.block = false;
         this.possibleValues = [1,2,3,4,5,6,7,8,9];
@@ -16,7 +17,7 @@ class SudokuNumber {
     setValue(value) {
 
         // Is valid?
-        if (value <= 0 || value > 9)
+        if (value < 0 || value > 9)
             throw new Error('Invalid number entry');
 
         // Set value
@@ -51,7 +52,7 @@ class SudokuNumber {
 
     }
 
-    draw(canvasCtx, x, y) {
+    draw(canvasCtx) {
 
         if (this.block)
             canvasCtx.fillStyle = "#666666";
@@ -60,17 +61,16 @@ class SudokuNumber {
 
         canvasCtx.beginPath();
 
-        canvasCtx.rect(x,y,48,48);
+        canvasCtx.rect(this.x,this.y, this.width, this.height);
         
         canvasCtx.fill();
 
         canvasCtx.fillStyle = "#000000";
-        canvasCtx.font="25px Arial";
+        canvasCtx.font= "Tahoma 15";
         canvasCtx.textAlign="center";
         canvasCtx.textBaseline="middle"; 
 
         if (this.value)
-            canvasCtx.fillText(this.value,x+24,y+24); 
-
+            canvasCtx.fillText(this.value,this.x+24,this.y+24);
     }
 }
