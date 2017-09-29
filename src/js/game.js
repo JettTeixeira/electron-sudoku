@@ -3,16 +3,31 @@ class Game {
 
     constructor(canvas) {
         
-        this.sudoku = new Sudoku();
         this.canvas = canvas;
-        // TODO: make screens? make an scoreboard ^^! ¿?
-        // TODO: dificult?
+        this.screen = new MainScreen();
     }
 
     draw() {
 
-        this.sudoku.drawChess(canvas.getContext("2d"));
+        let canvasCtx = this.canvas.getContext("2d");
+        
+        canvasCtx.fillStyle = "#FFFFFF";
+        canvasCtx.fillRect(0,0,800,600);
 
+        this.screen.draw(canvasCtx);
     }
 
+    handleEvent(event, x, y) {
+        console.log(event, x, y);
+
+        this.screen.handleEvent(event, x, y);
+    }
+
+    setMainScreen() {
+        this.screen = new MainScreen();
+    }
+
+    setSudokuScreen() {
+        this.screen = new SudokuScreen();
+    }
 }

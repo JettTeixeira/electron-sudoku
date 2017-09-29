@@ -3,9 +3,28 @@
 
 const game = new Game(document.getElementById("canvas"));
 
-let __ctx = document.getElementById("canvas").getContext("2d");
+//);
 
-__ctx.fillStyle = "#FFFFFF";
-__ctx.fillRect(0,0,800,600);
+game.canvas.addEventListener("mousemove", event => {
 
-game.draw();
+    let rect = game.canvas.getBoundingClientRect();
+
+    game.handleEvent("move", event.clientX - rect.left, event.clientY - rect.top);
+});
+
+game.canvas.addEventListener("mousedown", event => {
+    
+    let rect = game.canvas.getBoundingClientRect();
+    
+    game.handleEvent("down", event.clientX - rect.left, event.clientY - rect.top);
+});
+
+game.canvas.addEventListener("mouseup", event => {
+    
+    let rect = game.canvas.getBoundingClientRect();
+    
+    game.handleEvent("up", event.clientX - rect.left, event.clientY - rect.top);
+});
+
+// Anonymous function to exec draw in Game context
+setInterval(function(){game.draw();},100);
