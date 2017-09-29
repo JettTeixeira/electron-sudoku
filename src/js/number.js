@@ -20,6 +20,9 @@ class SudokuNumber extends CanvasObject {
         if (value < 0 || value > 9)
             throw new Error('Invalid number entry');
 
+        if (this.value == value)
+            value = 0;
+
         // Set value
         this.value = value;
 

@@ -6,11 +6,12 @@ class SudokuScreen {
     /**
      * Sudoku instance
      */
-    constructor() {
+    constructor(difficulty) {
 
         this.grid = [];
         this.numbersBtn = [];
         this.currentNumber = null;
+        this.difficulty = difficulty;
 
         this.generateGrid();
         this.generateNumbers();
@@ -24,7 +25,7 @@ class SudokuScreen {
 
             for (let c = 0; c < 9; ++c) {
 
-                let sudokuNumber = new SudokuNumber(177+c*50,72+r*50,48,48);
+                let sudokuNumber = new SudokuNumber(177+c*50,72+r*50,48,48, Math.floor((r*3+r/3+c)%9+1));
 
                 sudokuNumber.onMouseUp = () => {
                     sudokuNumber.setValue(this.currentNumber.text);
@@ -35,6 +36,25 @@ class SudokuScreen {
 
             this.grid.push(row);
         }
+
+        for (let i = 0; i < 10; ++i) {
+            
+        }
+    }
+
+    swapNumbers() {
+        
+    }
+
+    swapRows() {
+
+    }
+
+    swapGroups() {
+
+    }
+
+    rotateChess() {
 
     }
 
@@ -65,7 +85,7 @@ class SudokuScreen {
      * @param {Number} column Number of column
      * @return {Number} Value of cell
      */
-    getCell(row, column) {
+    /*getCell(row, column) {
 
         // Return value
         return this.grid[row][column];
@@ -78,7 +98,7 @@ class SudokuScreen {
      * @param {Number} value New value of cell
      * @return {Sudoku} Instance of this
      */
-    setCell(row, column, value) {
+    /*setCell(row, column, value) {
 
         // Is number? Is valid?
         if (typeof value === "Number" || value <= 0 || value > 9)
@@ -94,7 +114,7 @@ class SudokuScreen {
         // Return class
         return this;
     }
-
+*/
     //TODO: drawChess must delete! 
     draw(canvasCtx) {
         
