@@ -10,7 +10,7 @@ class SudokuScreen {
 
         this.grid = [];
         this.numbersBtn = [];
-        this.currentNumber = 0;
+        this.currentNumber = null;
 
         this.generateGrid();
         this.generateNumbers();
@@ -27,7 +27,7 @@ class SudokuScreen {
                 let sudokuNumber = new SudokuNumber(177+c*50,72+r*50,48,48);
 
                 sudokuNumber.onMouseUp = () => {
-                    sudokuNumber.setValue(this.currentNumber);
+                    sudokuNumber.setValue(this.currentNumber.text);
                 }
                 
                 row.push(sudokuNumber);
@@ -45,11 +45,18 @@ class SudokuScreen {
             let numberBtn = new CanvasButton(177+i*50,540,40,40,i+1, "Tahoma 15px");
 
             numberBtn.onMouseUp = () => {
-                this.currentNumber = numberBtn.text;
+
+                this.currentNumber.setProperties({backgroundColor:'#FFFFFF'});
+                numberBtn.setProperties({backgroundColor:'#DDDDDD'});
+
+                this.currentNumber = numberBtn;
             };
 
             this.numbersBtn.push(numberBtn);
         }
+
+        this.currentNumber = this.numbersBtn[0];
+        this.currentNumber.setProperties({backgroundColor:'#DDDDDD'});
     }
 
     /**

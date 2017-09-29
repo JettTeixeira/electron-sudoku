@@ -8,6 +8,15 @@ class CanvasObject {
         this.width = width;
         this.over = false;
         this.clicked = false;
+        this.properties = {};
+    }
+
+    setProperties(properties) {
+
+        for (let key in properties)
+            if (this.properties.hasOwnProperty(key))
+                this.properties[key] = properties[key]
+
     }
 
     itCollide(x, y) {

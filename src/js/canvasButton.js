@@ -5,6 +5,7 @@ class CanvasButton extends CanvasObject {
         super(x, y, width, height);
         this.text = text;
         this.font = font;
+        this.properties = {backgroundColor: "#FFFFFF", overBackgroundColor: "#DDDDDD", clickedBackgroundColor: "#AAAAAA"}
     }
 
     draw(canvasCtx) {
@@ -20,11 +21,11 @@ class CanvasButton extends CanvasObject {
         canvasCtx.fill();
 
         if (this.clicked)
-            canvasCtx.fillStyle = "#AAAAAA";
+            canvasCtx.fillStyle = this.properties.clickedBackgroundColor;
         else if (this.over)
-            canvasCtx.fillStyle = "#DDDDDD";
+            canvasCtx.fillStyle = this.properties.overBackgroundColor;
         else
-            canvasCtx.fillStyle = "#FFFFFF";
+            canvasCtx.fillStyle = this.properties.backgroundColor;
         
         canvasCtx.beginPath();
         canvasCtx.rect(this.x+2,this.y+2, this.width-4, this.height-4);
