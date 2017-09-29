@@ -1,10 +1,28 @@
 
 class MainScreen {
 
-    constructor() {
+    constructor(eventManager) {
+        this.eventManager = eventManager;
         this.btnEasy = new CanvasButton(300, 250, 200, 50, "Easy", "30px Tahoma");
         this.btnNormal = new CanvasButton(300, 350, 200, 50, "Normal", "30px Tahoma");
         this.btnHard = new CanvasButton(300, 450, 200, 50, "Hard", "30px Tahoma");
+
+        this.setEvents();
+    }
+
+    setEvents() {
+        
+        this.btnEasy.onMouseUp = () => {
+            this.eventManager.fire('showSudoku', 'easy');
+        };
+
+        this.btnNormal.onMouseUp = () => {
+            this.eventManager.fire('showSudoku', 'normal');
+        };
+
+        this.btnHard.onMouseUp = () => {
+            this.eventManager.fire('showSudoku', 'hard');
+        };
 
     }
 

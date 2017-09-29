@@ -4,7 +4,20 @@ class Game {
     constructor(canvas) {
         
         this.canvas = canvas;
-        this.screen = new MainScreen();
+        this.eventManager = new EventManager();
+        this.screen = new MainScreen(this.eventManager);
+
+        this.setEvents();
+    }
+
+    setEvents() {
+        this.eventManager.on('showSudoku', (dificulty) => {
+            this.screen = new SudokuScreen(this.eventManager, dificulty);
+        });
+
+        this.eventManager.on('showMain', () => {
+            this.screen = new MainScreen(this.eventManager);
+        });
     }
 
     draw() {
@@ -21,13 +34,5 @@ class Game {
         console.log(event, x, y);
 
         this.screen.handleEvent(event, x, y);
-    }
-
-    setMainScreen() {
-        this.screen = new MainScreen();
-    }
-
-    setSudokuScreen() {
-        this.screen = new SudokuScreen();
     }
 }
