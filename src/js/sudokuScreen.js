@@ -6,12 +6,12 @@ class SudokuScreen {
     /**
      * Sudoku instance
      */
-    constructor(eventManager, difficulty) {
+    constructor(eventManager, properties) {
 
         this.grid = [];
         this.numbersBtn = [];
         this.currentNumber = null;
-        this.difficulty = difficulty;
+        this.properties = properties;
         this.eventManager = eventManager;
 
         this.generateGrid();
@@ -38,25 +38,97 @@ class SudokuScreen {
             this.grid.push(row);
         }
 
-        for (let i = 0; i < 10; ++i) {
-            
+        // Simplest way ^^
+        for (let i = 1; i < 7; ++i) {
+            this.swapNumbers(i, Math.floor(Math.random()*9+1));
+            this.swapRows(Math.floor(Math.random()*3),Math.floor(Math.random()*3),Math.floor(Math.random()*3));
+            this.swapGroups(Math.floor(Math.random()*3),Math.floor(Math.random()*3,Math.random()*3));
+            this.rotateChess();
+        }
+        
+        // Delete and block
+        let i = 0;
+        let current = 0;
+        let max = 81/this.properties.clues;
+        let block =  Math.floor(max) - Math.floor(Math.random() * Math.ceil(81/this.properties.clues));//Math.floor(Math.random() * Math.ceil(81/this.properties.clues));
+console.log(++i,block,max);
+        while(current < 81) {
+
+            if(current>=max) {
+                max += 81/this.properties.clues;
+                block = Math.floor(max) - Math.floor(Math.random() * Math.ceil(81/this.properties.clues));
+                console.log(++i,block,Math.floor(max));
+            }
+
+            let sudokuNumber = this.grid[Math.floor(current/9)][current%9];
+
+            if (current == block)
+                sudokuNumber.block = true;
+            else
+               sudokuNumber.value = 0;
+
+            ++current;
         }
     }
 
-    swapNumbers() {
+    swapNumbers(from, to) {
+
+        this.grid.forEach(r => {
+            r.forEach(e => {
+                if (e.value == from)
+                    e.value = to;
+                else if (e.value == to)
+                    e.value = from;
+            });
+        });
         
     }
 
-    swapRows() {
+    swapRows(group, from, to) {
 
+        from = this.grid[group*3+from];
+        to = this.grid[group*3+to];
+
+        for (let i = 0; i < 9; ++i) {
+            let tmpVal = from[i].value;
+            from[i].value = to[i].value;
+            to[i].value = tmpVal;
+        }
     }
 
-    swapGroups() {
+    swapGroups(from, to) {
 
+        from = from*3;
+        to = to*3;
+
+        for (let i = 0; i < 3; ++i) {
+            for (let j = 0; j < 9; ++j) {
+                let tmpVal = this.grid[from+i][j].value;
+                this.grid[from+i][j].value = this.grid[to+i][j].value;
+                this.grid[to+i][j].value = tmpVal;
+            }
+        }
     }
 
     rotateChess() {
 
+        for (let r = 0; r < 9; ++r) {
+            for (let c = r+1; c < 9; ++c) {
+                let tmpVal = this.grid[r][c].value;
+                this.grid[r][c].value = this.grid[c][r].value;
+                this.grid[c][r].value = tmpVal;
+                
+            }
+        }
+
+        for (let r = 0; r < 9; ++r) {
+            for (let c = 0; c < 4; ++c) {
+                let tmpVal = this.grid[r][c].value;
+                this.grid[r][c].value = this.grid[r][8-c].value;
+                this.grid[r][8-c].value = tmpVal;
+                
+            }
+        }
     }
 
     generateNumbers() {
@@ -80,43 +152,6 @@ class SudokuScreen {
         this.currentNumber.setProperties({backgroundColor:'#DDDDDD'});
     }
 
-    /**
-     * Returns a value of the specified cell
-     * @param {Number} row Number of row
-     * @param {Number} column Number of column
-     * @return {Number} Value of cell
-     */
-    /*getCell(row, column) {
-
-        // Return value
-        return this.grid[row][column];
-    }
-
-    /**
-     * Set a value in the specified cell
-     * @param {Number} row Number of row
-     * @param {Number} column Number of column
-     * @param {Number} value New value of cell
-     * @return {Sudoku} Instance of this
-     */
-    /*setCell(row, column, value) {
-
-        // Is number? Is valid?
-        if (typeof value === "Number" || value <= 0 || value > 9)
-            throw new Error('Invalid number entry');
-
-        // Row && Column are valid? 
-        if (row < 0 || row > 8 || column < 0 || column > 8)
-            throw new Error('Invalid pointer');
-        
-        // Set number
-        this.grid[row][column] = number;
-
-        // Return class
-        return this;
-    }
-*/
-    //TODO: drawChess must delete! 
     draw(canvasCtx) {
         
         // Draw grey lines (all grid)

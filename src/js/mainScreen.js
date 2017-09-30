@@ -13,15 +13,33 @@ class MainScreen {
     setEvents() {
         
         this.btnEasy.onMouseUp = () => {
-            this.eventManager.fire('showSudoku', 'easy');
+            this.eventManager.fire('showSudoku', {
+                timer:1200,
+                blockUpTimer:60,
+                blockUpPowerDuration:15,
+                clues:40,
+                errores:true
+            });
         };
 
         this.btnNormal.onMouseUp = () => {
-            this.eventManager.fire('showSudoku', 'normal');
+            this.eventManager.fire('showSudoku', {
+                timer:600,
+                blockUpTimer:60,
+                blockUpPowerDuration:30,
+                clues:30,
+                errores:false
+            });
         };
 
         this.btnHard.onMouseUp = () => {
-            this.eventManager.fire('showSudoku', 'hard');
+            this.eventManager.fire('showSudoku', {
+                timer:1200,
+                blockUpTimer:30,
+                blockUpPowerDuration:30,
+                clues:30,
+                errores:false
+            });
         };
 
     }

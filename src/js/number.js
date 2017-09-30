@@ -16,6 +16,10 @@ class SudokuNumber extends CanvasObject {
      */
     setValue(value) {
 
+        // Is blocked?
+        if (this.block)
+            return this;
+
         // Is valid?
         if (value < 0 || value > 9)
             throw new Error('Invalid number entry');
