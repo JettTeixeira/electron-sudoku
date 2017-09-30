@@ -6,12 +6,13 @@ class SudokuScreen {
     /**
      * Sudoku instance
      */
-    constructor(difficulty) {
+    constructor(eventManager, difficulty) {
 
         this.grid = [];
         this.numbersBtn = [];
         this.currentNumber = null;
         this.difficulty = difficulty;
+        this.eventManager = eventManager;
 
         this.generateGrid();
         this.generateNumbers();
