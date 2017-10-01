@@ -9,9 +9,9 @@ class SudokuScreen {
     constructor(eventManager, properties) {
 
         this.grid = [];
-        this.rawGrid = [];
-        this.tempGrid = [];
-        this.solutions = [];
+        //this.rawGrid = [];
+        //this.tempGrid = [];
+        this.solutions = null;
         this.numbersBtn = [];
         this.currentNumber = null;
         this.properties = properties;
@@ -24,13 +24,14 @@ class SudokuScreen {
 
         this.generateGrid();
         this.generateNumbers();
-        // Here we copy the SudokuNumber matrix (already scrambled) to an integer matrix
-        this.generateRawGrid();
+        
+
+        this.solutions = this.findSolutions(this.generateRawGrid());
 
         // As this is a relatively expensive function, we'll only run it if we're going to check for errors (easy mode)
-        if(this.properties['errores'])
-            this.findSolutions();
-            console.log(this.solutions);
+        //if(this.properties['errores'])
+        //    this.findSolutions();
+        //    console.log(this.solutions);
 
         this.globalTimer.initTimer();
         this.blockUpTimer.initTimer();
@@ -240,113 +241,9 @@ class SudokuScreen {
         this.grid.forEach(r => r.forEach(e => e.handleEvent(event, x, y)));
     }
 
-    generateRawGrid(){
-        for(let row of this.grid){
-            let rawRow = [];
+    findSolutions(rawGrid, solutions = []) {
 
-            for(let number of row)
-                rawRow.push(number.getValue());
-
-            this.rawGrid.push(rawRow);
-        }
-    }
-
-    findSolutions(){
-        for(let fila of this.rawGrid)
-            this.tempGrid.push(fila.slice(0));
-
-        let emptyCell = this.findEmptyCell();
-        
-        if(!emptyCell){
-            return;
-        }
-
-        let leadRow = emptyCell[0];
-        let leadCol = emptyCell[1];
-
-        for(let i = 1; i <= 9; ++i)
-            if(this.isValid(leadRow, leadCol, i)){
-                this.tempGrid[leadRow][leadCol] = i;
-                this.findSolution();
-                this.tempGrid[leadRow][leadCol] = 0;
-            }
-    }
-
-    findSolution(){
-        let emptyCell = this.findEmptyCell();
-
-        // If there's no empty cells, the board is solved, and it's then copied to our solutions list
-        if(!emptyCell){
-            let solvedGrid = []
-
-            for(let fila of this.tempGrid)
-                solvedGrid.push(fila.slice(0));
-
-            this.solutions.push(solvedGrid);
-            return true;
-        }
-
-        let row = emptyCell[0];
-        let col = emptyCell[1];
-
-        for(let i = 1; i <= 9; ++i){
-            if(this.isValid(row, col, i))
-            {
-                this.tempGrid[row][col] = i;
-
-                if(this.findSolution())
-                    return true;
-             
-                this.tempGrid[row][col] = 0;
-            }
-        }
-
-        return false;
-    }
-
-    // Three simple validation checks: Row, Column, and 3x3 board the number belongs to
-    isValid(row, col, number){
-        let length = this.tempGrid.length;
-        let width = Math.sqrt(length);
-
-        for(let i = 0; i < length; ++i)
-            if(i !== col && this.tempGrid[row][i] === number)
-                return false;
-
-        for(let i = 0; i < length; ++i)
-            if(i !== row && this.tempGrid[i][col] === number)
-                return false;
-
-        let limit_x = width * Math.floor(row / width);
-        let limit_y = width * Math.floor(col / width);
-
-        for(let i = 0; i < width; ++i)
-            for(let j = 0; j < width; ++j){
-                if(limit_x + i == row && limit_y + j == col)
-                    continue;
-
-                if(this.tempGrid[limit_x + i][limit_y + j] === number)
-                    return false;
-            }
-
-        return true;
-    }
-
-    findEmptyCell(){
-        let length = this.tempGrid.length;
-
-        for(let i = 0; i < length; ++i)
-            for(let j = 0; j < length; ++j)
-                if(this.tempGrid[i][j] === 0)
-                    return [i, j];
-        
-        return false;
-    }
-
-
-    _findSolutions(rawGrid, solutions = []) {
-
-        let emptyCell = this._findEmptyCell(rawGrid);
+        let emptyCell = this.findEmptyCell(rawGrid);
 
         if (!emptyCell) {
             //copy
@@ -360,12 +257,12 @@ class SudokuScreen {
         let col = emptyCell[1];
         //console.log(row,col);
         for(let n = 1; n <= 9; ++n) {
-            if (!this._isValid(rawGrid, row, col, n))
+            if (!this.isValid(rawGrid, row, col, n))
                 continue;
 
             rawGrid[row][col] = n;
             
-            this._findSolutions(rawGrid, solutions);
+            this.findSolutions(rawGrid, solutions);
             
             rawGrid[row][col] = 0;
         }
@@ -373,7 +270,7 @@ class SudokuScreen {
         return solutions;
     }
 
-    _isValid(rawGrid, row, col, number) {
+    isValid(rawGrid, row, col, number) {
         let length = rawGrid.length;
         let width = Math.sqrt(length);
 
@@ -384,18 +281,23 @@ class SudokuScreen {
         for(let i = 0; i < length; ++i)
             if(i !== row && rawGrid[i][col] === number)
                 return false;
-                for(let j = 0; j < width; ++j){
-                    if(limit_x + i == row && limit_y + j == col)
-                        continue;
+
+        let limit_x = width * Math.floor(row / width);
+        let limit_y = width * Math.floor(col / width);
+
+        for(let i = 0; i < width; ++i)
+        for(let j = 0; j < width; ++j){
+            if(limit_x + i == row && limit_y + j == col)
+                continue;
+
+            if(rawGrid[limit_x + i][limit_y + j] === number)
+                return false;
+        }
+
+        return true;
+    }
         
-                    if(rawGrid[limit_x + i][limit_y + j] === number)
-                        return false;
-                }
-        
-                return true;
-            }
-        
-    _generateRawGrid() {
+    generateRawGrid() {
 
         let rawGrid = [];
         
@@ -411,7 +313,7 @@ class SudokuScreen {
         return rawGrid;
     }
 
-    _findEmptyCell(rawGrid) {
+    findEmptyCell(rawGrid) {
         let length = rawGrid.length;
         
         for(let i = 0; i < length; ++i)
@@ -423,6 +325,7 @@ class SudokuScreen {
     }
     
     highlightInvalidCells(row, col, number){
+        return; // TODO!
         let length = this.tempGrid.length;
         let width = Math.sqrt(length);
 
@@ -438,12 +341,10 @@ class SudokuScreen {
             else
                 this.grid[i][col].isCollision = false;
 
-
         let limit_x = width * Math.floor(row / width);
         let limit_y = width * Math.floor(col / width);
 
         for(let i = 0; i < width; ++i)
-
             for(let j = 0; j < width; ++j){
                 if(limit_x + i == row && limit_y + j == col)
                     continue;
