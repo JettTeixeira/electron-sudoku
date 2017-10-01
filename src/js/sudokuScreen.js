@@ -16,6 +16,7 @@ class SudokuScreen {
         this.currentNumber = null;
         this.properties = properties;
         this.eventManager = eventManager;
+        this.powerActive = false;
         
         this.globalTimer = new CanvasTimer(200,15,100,40,"Timer:",this.properties.timer);
         this.blockUpTimer = new CanvasTimer(350,15,100,40,"PC Turn:",this.properties.blockUpTimer);
@@ -52,12 +53,12 @@ class SudokuScreen {
         this.blockUpTimer.eventTimer = () => {
             this.blockUpPowerDuration.current = this.properties.blockUpPowerDuration;
             this.blockUpPowerDuration.initTimer();
-            if(Math.floor(Math.random() * 10) % 2 = 0)
-                this.triggerPower();
+            this.triggerPower();
         };
 
         this.blockUpPowerDuration.eventTimer = () => {
             this.blockUpPowerDuration.stopTimer();
+            this.disablePower();
         };
     }
 
@@ -187,11 +188,12 @@ class SudokuScreen {
             let numberBtn = new CanvasButton(181+i*50,540,40,40,i+1, "Tahoma 15px");
 
             numberBtn.onMouseUp = () => {
+                if(!numberBtn.blocked){
+                    this.currentNumber.setProperties({backgroundColor:'#FFFFFF'});
+                    numberBtn.setProperties({backgroundColor:'#DDDDDD'});
 
-                this.currentNumber.setProperties({backgroundColor:'#FFFFFF'});
-                numberBtn.setProperties({backgroundColor:'#DDDDDD'});
-
-                this.currentNumber = numberBtn;
+                    this.currentNumber = numberBtn;
+                }
             };
 
             this.numbersBtn.push(numberBtn);
@@ -369,6 +371,46 @@ class SudokuScreen {
     }
 
     triggerPower(){
-        // TODO
+        if(this.powerActive)
+            return;
+
+        let randomNum = Math.floor(Math.random() * 10);
+        this.powerActive = true;
+        this.blockNumber();
+        /*switch(true){
+            case randomNum < 2:
+                this.blockNumber();
+        }*/
     }
+
+    disablePower(){
+        if(!this.powerActive)
+            return;
+
+        this.blockNumber(false);
+        this.powerActive = false;
+    }
+
+    blockNumber(enablePower = true){
+        if(enablePower){
+            this.currentNumber.blocked = true;
+            this.currentNumber.setProperties({backgroundColor:'#d80404'});
+            
+            if(this.currentNumber.text == 9)
+                this.currentNumber = this.numbersBtn[0];
+            else
+                this.currentNumber = this.numbersBtn[this.currentNumber.text];
+
+            this.currentNumber.setProperties({backgroundColor:'#DDDDDD'});
+            this.numbersBtn[this.currentNumber - 1];
+            return;
+        }
+
+        for(let button of this.numbersBtn)
+            if(button.blocked)
+            {
+                button.blocked = false;
+                button.setProperties({backgroundColor:'#FFFFFF'});
+            }
+    }    
 }
