@@ -42,7 +42,7 @@ class MainScreen {
         // Fire 'showSudoku' when 'mouse up' in 'btnEasy'
         this.btnEasy.onMouseUp = () => {
             this.eventManager.fire('showSudoku', {
-                timer:1200,
+                timer:600,
                 blockUpTimer:60,
                 blockUpPowerDuration:15,
                 clues:40,
@@ -53,7 +53,7 @@ class MainScreen {
         // Fire 'showSudoku' when 'mouse up' in 'btnNormal'
         this.btnNormal.onMouseUp = () => {
             this.eventManager.fire('showSudoku', {
-                timer:600,
+                timer:900,
                 blockUpTimer:60,
                 blockUpPowerDuration:30,
                 clues:30,
@@ -66,8 +66,8 @@ class MainScreen {
             this.eventManager.fire('showSudoku', {
                 timer:1200,
                 blockUpTimer:30,
-                blockUpPowerDuration:30,
-                clues:30,
+                blockUpPowerDuration:25,
+                clues:20,
                 errors:false
             });
         };

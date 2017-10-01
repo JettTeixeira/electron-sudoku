@@ -40,13 +40,13 @@ class CanvasTimer extends CanvasObject {
 
     /**
      * Start the timer
-     * @returns {Boolean|Error} Init correctly
+     * @returns {Boolean} Init correctly
      */
     initTimer() {
         
         // Interval exist?
         if (this.interval !== null)
-            throw new Error('Timer started');
+            return true;
         
         // Set interval ID, tick at 1 second
         this.interval = setInterval(()=>{this.tick();},1000);
@@ -57,13 +57,13 @@ class CanvasTimer extends CanvasObject {
 
     /**
      * Stop the timer
-     * @returns {Boolean|Error} Stop correctly
+     * @returns {Boolean} Stop correctly
      */
     stopTimer() {
         
         // Interval exist?
         if (this.interval === null)
-        throw new Error('Timer dosen\'t exists');
+            return true;
         
         // Stop interval
         clearInterval(this.interval);

@@ -32,7 +32,7 @@ class CanvasButton extends CanvasObject {
 
         // Set properties
         this.font = font;
-        this.properties = {backgroundColor: "#FFFFFF", overBackgroundColor: "#DDDDDD", clickedBackgroundColor: "#AAAAAA"}
+        this.properties = {backgroundColor: "#FFFFFF", overBackgroundColor: "#DDDDDD", clickedBackgroundColor: "#AAAAAA"};
         this.blocked = false;
     }
 

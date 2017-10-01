@@ -1,4 +1,4 @@
-# Sudoku
+# SuDoKu
 
 A new type of sudoku where the computer wants you to lose.
 
@@ -22,14 +22,14 @@ A new type of sudoku where the computer wants you to lose.
 ## Dificulties
 
 - **Easy:**
-  - Global Timer: 20 minutes
+  - Global Timer: 10 minutes
   - Block-up Timer: 1 minute
   - Block-up Power Duration: 15 seconds
   - Clues: 40
   - Grid errors: Displayed
 
 - **Normal:**
-  - Global Timer: 10 minutes
+  - Global Timer: 15 minutes
   - Block-up Timer: 1 minute
   - Block-up Power Duration: 30 seconds
   - Clues: 30
@@ -38,8 +38,8 @@ A new type of sudoku where the computer wants you to lose.
 - **Hard:**
   - Global Timer: 20 minutes
   - Block-up Timer: 30 seconds
-  - Block-up Power Duration: 30 seconds
-  - Clues: 30
+  - Block-up Power Duration: 25 seconds
+  - Clues: 20
   - Grid errors: Hidden
 
 

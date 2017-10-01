@@ -32,6 +32,7 @@ class SudokuNumber extends CanvasObject {
         // Set properties
         this.block = false;
         this.isCollision = false;
+        this.hidden = false;
     }
 
     /**
@@ -66,8 +67,10 @@ class SudokuNumber extends CanvasObject {
      */
     draw(canvasCtx) {
 
-        // Is wrong? is Blocked? (Change backgground color)
-        if(this.isCollision)
+        // Is hidden? Is wrong? is Blocked? (Change backgground color)
+        if (this.hidden)
+        canvasCtx.fillStyle = "#000000";
+        else if (this.isCollision)
             canvasCtx.fillStyle = "#d80404";
         else if (this.block)
             canvasCtx.fillStyle = "#666666";

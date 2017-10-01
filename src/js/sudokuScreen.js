@@ -1,64 +1,84 @@
-
+/*!
+ * Electron Sodoku <https://github.com/JettTeixeira/electron-sudoku>
+ * 
+ * @name      SudokuScreen
+ * @version   v1.0
+ * @copyright Copyright (c) 2017 Leonardo Alfaro, Luis Callo Milla, Jett Teixeira
+ * @license   MIT Licensed
+ * 
+ * DESCRIPTION
+ * ===========
+ * 
+ * Sudoku Screen of game. SuDoKu game!!
+ * 
+ */
 const __cellSize = 50;
 
 class SudokuScreen {
     
     /**
-     * Sudoku instance
+     * Create Sudoku Screen
+     * @param {EventManager} eventManager Game event manager
+     * @param {Object} propreties Sudoku properties
      */
     constructor(eventManager, properties) {
 
+        // Set event manager
+        this.eventManager = eventManager;
+
+        // Set properties
+        this.properties = properties;
+
+        // Sudoku grid
         this.grid = [];
-        //this.rawGrid = [];
-        //this.tempGrid = [];
-        this.solutions = null;
+        this.generateGrid();
+
+        // Sudoku solutions
+        this.solutions = this.properties.errors ? this.findSolutions(this.generateRawGrid()) : [];
+
+        // Playable numbers buttons
         this.numbersBtn = [];
         this.currentNumber = null;
-        this.properties = properties;
-        this.eventManager = eventManager;
+        this.generateNumbers();
+
+        //TODO: view!
         this.powerActive = false;
         
+        // Timers
         this.globalTimer = new CanvasTimer(200,15,100,40,"Timer:",this.properties.timer);
         this.blockUpTimer = new CanvasTimer(350,15,100,40,"PC Turn:",this.properties.blockUpTimer);
         this.blockUpPowerDuration = new CanvasTimer(500,15,100,40,"PC Power:",0);
         
-
-        this.generateGrid();
-        this.generateNumbers();
-        
-
-        this.solutions = this.findSolutions(this.generateRawGrid());
-
-        // As this is a relatively expensive function, we'll only run it if we're going to check for errors (easy mode)
-        //if(this.properties['errores'])
-        //    this.findSolutions();
-        //    console.log(this.solutions);
-
+        // Init timers
         this.globalTimer.initTimer();
         this.blockUpTimer.initTimer();
 
+        // Set events
         this.setEvents();
     }
 
+    /**
+     * Set events of the screen objects
+     * @returns {Boolean} Setted correctly
+     */
     setEvents() {
 
+        // When ticks ends on 'globalTimer'
         this.globalTimer.eventTimer = () => {
+
+            // Stop all timers
             this.globalTimer.stopTimer();
             this.blockUpTimer.stopTimer();
             this.blockUpPowerDuration.stopTimer();
 
+            // Shows final screen with 'fail' message
             this.eventManager.fire('showFinal', 'FAIL');
         };
 
+        // When ticks ends on 'blockUpTimer'
         this.blockUpTimer.eventTimer = () => {
-            this.blockUpPowerDuration.current = this.properties.blockUpPowerDuration;
-            this.blockUpPowerDuration.initTimer();
-            this.triggerPower();
-        };
+            this.triggerPower(Math.floor(Math.random()*5));
 
-        this.blockUpPowerDuration.eventTimer = () => {
-            this.blockUpPowerDuration.stopTimer();
-            this.disablePower();
         };
     }
 
@@ -74,13 +94,8 @@ class SudokuScreen {
 
                 sudokuNumber.onMouseUp = () => {
                     sudokuNumber.setValue(this.currentNumber.text);
-                    if(this.solveAndMark()) {
-                        this.globalTimer.stopTimer();
-                        this.blockUpTimer.stopTimer();
-                        this.blockUpPowerDuration.stopTimer();
-
-                        this.eventManager.fire('showFinal', 'WIN');
-                    }
+                    this.trySolve();
+                    this.tryError();
                 }
                 
                 row.push(sudokuNumber);
@@ -253,11 +268,14 @@ class SudokuScreen {
 
     findSolutions(rawGrid, solutions = []) {
 
+        if (!this.properties.errors)
+            return;
+
         let emptyCell = this.findEmptyCell(rawGrid);
 
         if (!emptyCell) {
-            //copy
-            console.log("DOIT!");
+
+
             let tmpGrid = rawGrid.map(arr => arr.slice());
             solutions.push(tmpGrid);
             return solutions;
@@ -265,7 +283,7 @@ class SudokuScreen {
 
         let row = emptyCell[0];
         let col = emptyCell[1];
-        //console.log(row,col);
+
         for(let n = 1; n <= 9; ++n) {
             if (!this.isValid(rawGrid, row, col, n))
                 continue;
@@ -283,6 +301,9 @@ class SudokuScreen {
     isValid(rawGrid, row, col, number) {
         let length = rawGrid.length;
         let width = Math.sqrt(length);
+
+        if (number == 0)
+            return false;
 
         for(let i = 0; i < length; ++i)
             if(i !== col && rawGrid[row][i] === number)
@@ -334,7 +355,30 @@ class SudokuScreen {
         return false;
     }
 
-    solveAndMark() {
+    trySolve() {
+
+        for (let r = 0; r < 9; ++r)
+            for (let c = 0; c < 9; ++c)
+                if (!this.grid[r][c].value)
+                    return false;
+
+        let rawGrid = this.generateRawGrid();
+
+        for (let r = 0; r < 9; ++r)
+            for (let c = 0; c < 9; ++c)
+                if (!this.isValid(rawGrid, r, c, rawGrid[r][c]))
+                    return false;
+
+        this.globalTimer.stopTimer();
+        this.blockUpTimer.stopTimer();
+        this.blockUpPowerDuration.stopTimer();
+        this.eventManager.fire('showFinal', 'WIN');
+    }
+
+    tryError() {
+
+        if (!this.properties.errors)
+            return;
 
         let max = -1;
         let weights = new Array(this.solutions.length).fill(0);
@@ -350,12 +394,6 @@ class SudokuScreen {
 
         }
 
-        if (max == 81)
-            return true;
-
-        if (!this.properties.errors)
-            return false;
-
         for (let i = 0; i < weights.length; ++i) {
             if (weights[i] != max)
                 continue;
@@ -366,51 +404,144 @@ class SudokuScreen {
                     else
                         this.grid[r][c].isCollision = false;
         }
-
-        return false;
     }
 
-    triggerPower(){
-        if(this.powerActive)
-            return;
+    triggerPower(powerId){
 
-        let randomNum = Math.floor(Math.random() * 10);
-        this.powerActive = true;
-        this.blockNumber();
-        /*switch(true){
-            case randomNum < 2:
-                this.blockNumber();
-        }*/
-    }
-
-    disablePower(){
-        if(!this.powerActive)
-            return;
-
-        this.blockNumber(false);
-        this.powerActive = false;
-    }
-
-    blockNumber(enablePower = true){
-        if(enablePower){
-            this.currentNumber.blocked = true;
-            this.currentNumber.setProperties({backgroundColor:'#d80404'});
-            
-            if(this.currentNumber.text == 9)
-                this.currentNumber = this.numbersBtn[0];
-            else
-                this.currentNumber = this.numbersBtn[this.currentNumber.text];
-
-            this.currentNumber.setProperties({backgroundColor:'#DDDDDD'});
-            this.numbersBtn[this.currentNumber - 1];
-            return;
+        switch(powerId) {
+            case 0:
+                return this.blockNumberPower();
+                break;
+            case 1:
+                return this.DeleteNumberPower();
+                break;
+            case 2:
+                return this.BlindScreenPower();
+                break;
+            case 3:
+                return this.FakeItPower();
+                break;
+            case 4:
+                return this.MyTurnPower();
+                break;
         }
 
-        for(let button of this.numbersBtn)
-            if(button.blocked)
-            {
-                button.blocked = false;
-                button.setProperties({backgroundColor:'#FFFFFF'});
+        throw new Error('Invalid power');
+    }
+
+    blockNumberPower() {
+
+        let blocked = Math.floor(Math.random() * 9);
+
+        this.numbersBtn[blocked].blocked = true;
+        this.numbersBtn[blocked].setProperties({backgroundColor: "#000000", overBackgroundColor: "#000000", clickedBackgroundColor: "#000000"});
+
+        if (this.currentNumber.text == blocked+1) {
+
+            this.currentNumber = this.numbersBtn[(blocked+1)%9];
+            this.currentNumber.setProperties({backgroundColor:'#DDDDDD'});
+        }
+
+        this.blockUpPowerDuration.eventTimer = () => {
+            this.numbersBtn[blocked].blocked = false;
+            this.numbersBtn[blocked].setProperties({backgroundColor: "#FFFFFF", overBackgroundColor: "#DDDDDD", clickedBackgroundColor: "#AAAAAA"});
+            this.blockUpPowerDuration.stopTimer();
+        }
+
+        this.blockUpPowerDuration.current = this.properties.blockUpPowerDuration;
+        this.blockUpPowerDuration.initTimer();
+
+        return true;
+    }
+
+    DeleteNumberPower() {
+
+        let number = Math.floor(Math.random() * 81);
+        let current = number;
+
+        do {
+
+            let sudokuNumber = this.grid[Math.floor(current/9)][current%9];
+
+            if (!sudokuNumber.block && sudokuNumber.value) {
+  
+                sudokuNumber.value = 0;
+                sudokuNumber.isCollision = false;
+                break;
             }
-    }    
+            
+            current = (current+1)%81;
+
+        } while(current != number);
+        
+        return true;
+    }
+
+    BlindScreenPower() {
+
+        let limit_x = Math.floor(Math.random()*3);
+        let limit_y = Math.floor(Math.random()*3);
+
+        for(let r = limit_x*3; r < limit_x*3+3; ++r)
+            for(let c = limit_y*3; c < limit_y*3+3; ++c)
+                this.grid[r][c].hidden = true;
+
+        this.blockUpPowerDuration.eventTimer = () => {
+            for(let r = limit_x*3; r < limit_x*3+3; ++r)
+                for(let c = limit_y*3; c < limit_y*3+3; ++c)
+                    this.grid[r][c].hidden = false;
+            this.blockUpPowerDuration.stopTimer();
+        }
+        
+        this.blockUpPowerDuration.current = this.properties.blockUpPowerDuration;
+        this.blockUpPowerDuration.initTimer();
+
+        return true;
+    }
+
+    FakeItPower() {
+        
+        let number = Math.floor(Math.random() * 81);
+        let current = number;
+
+        do {
+
+            let sudokuNumber = this.grid[Math.floor(current/9)][current%9];
+
+            if (!sudokuNumber.block && sudokuNumber.value) {
+                sudokuNumber.value = (sudokuNumber.value + Math.floor(Math.random() * 8))%9+1;
+                this.trySolve();
+                this.tryError();
+                break;
+            }
+            
+            current = (current+1)%81;
+
+        } while(current != number);
+        
+        return true;
+    }
+
+    MyTurnPower(){
+        
+        let number = Math.floor(Math.random() * 81);
+        let current = number;
+
+        do {
+
+            let sudokuNumber = this.grid[Math.floor(current/9)][current%9];
+
+            if (!sudokuNumber.block && !sudokuNumber.value) {
+                sudokuNumber.value = Math.floor(Math.random() * 9)+1;
+                this.trySolve();
+                this.tryError();
+                break;
+            }
+            
+            current = (current+1)%81;
+
+        } while(current != number);
+        
+        return true;
+    }
 }
