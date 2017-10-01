@@ -71,7 +71,7 @@ class SudokuScreen {
 
                 sudokuNumber.onMouseUp = () => {
                     sudokuNumber.setValue(this.currentNumber.text);
-                    this.highlightInvalidCells((sudokuNumber.y - 72) / 50, (sudokuNumber.x - 177) / 50, sudokuNumber.getValue());
+                    this.getValidGrid();
                 }
                 
                 row.push(sudokuNumber);
@@ -322,6 +322,36 @@ class SudokuScreen {
                     return [i, j];
         
         return false;
+    }
+
+    getValidGrid() {
+
+        let max = -1;
+        let weights = new Array(this.solutions.length).fill(0);
+
+        for (let i = 0; i < weights.length; ++i) {
+            
+            for (let r = 0; r < 9; ++r)
+                for (let c = 0; c < 9; ++c)
+                    if (this.grid[r][c].value == this.solutions[i][r][c])
+                        ++weights[i];
+
+            max = Math.max(max, weights[i]);
+
+        }
+console.log(max, weights);
+        for (let i = 0; i < weights.length; ++i) {
+            if (weights[i] != max)
+                continue;
+            console.log("MAX");
+            for (let r = 0; r < 9; ++r)
+                for (let c = 0; c < 9; ++c)
+                    if (this.grid[r][c].value && this.grid[r][c].value != this.solutions[i][r][c])
+                        this.grid[r][c].isCollision = true;
+                    else
+                        this.grid[r][c].isCollision = false;
+        }
+
     }
     
     highlightInvalidCells(row, col, number){

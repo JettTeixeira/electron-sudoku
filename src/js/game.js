@@ -36,7 +36,7 @@ class Game {
     }
 
     handleEvent(event, x, y) {
-        console.log(event, x, y);
+        //console.log(event, x, y);
 
         this.screen.handleEvent(event, x, y);
     }
