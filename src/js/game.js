@@ -11,12 +11,17 @@ class Game {
     }
 
     setEvents() {
+
+        this.eventManager.on('showMain', () => {
+            this.screen = new MainScreen(this.eventManager);
+        });
+
         this.eventManager.on('showSudoku', (dificulty) => {
             this.screen = new SudokuScreen(this.eventManager, dificulty);
         });
 
-        this.eventManager.on('showMain', () => {
-            this.screen = new MainScreen(this.eventManager);
+        this.eventManager.on('showFinal', (message) => {
+            this.screen = new FinalScreen(this.eventManager, message);
         });
     }
 

@@ -17,7 +17,7 @@ class SudokuScreen {
         this.properties = properties;
         this.eventManager = eventManager;
         
-        this.globalTimer = new CanvasTimer(200,15,100,40,"Timer:",this.properties.timer);
+        this.globalTimer = new CanvasTimer(200,15,100,40,"Timer:",this.properties.globalTimer);
         this.blockUpTimer = new CanvasTimer(350,15,100,40,"PC Turn:",this.properties.blockUpTimer);
         this.blockUpPowerDuration = new CanvasTimer(500,15,100,40,"PC Power:",0);
         
@@ -34,7 +34,28 @@ class SudokuScreen {
 
         this.globalTimer.initTimer();
         this.blockUpTimer.initTimer();
-        //this.globalTimer.initTimer();
+
+        this.setEvents();
+    }
+
+    setEvents() {
+
+        this.globalTimer.eventTimer = () => {
+            this.globalTimer.stopTimer();
+            this.blockUpTimer.stopTimer();
+            this.blockUpPowerDuration.stopTimer();
+
+            this.eventManager.fire('showFinal', 'FAIL');
+        };
+
+        this.blockUpTimer.eventTimer = () => {
+            this.blockUpPowerDuration.current = this.properties.blockUpPowerDuration;
+            this.blockUpPowerDuration.initTimer();
+        };
+
+        this.blockUpPowerDuration.eventTimer = () => {
+            this.blockUpPowerDuration.stopTimer();
+        };
     }
 
     generateGrid() {
