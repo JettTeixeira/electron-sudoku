@@ -52,7 +52,7 @@ class SudokuScreen {
         this.blockUpTimer.eventTimer = () => {
             this.blockUpPowerDuration.current = this.properties.blockUpPowerDuration;
             this.blockUpPowerDuration.initTimer();
-            if(Math.floor(Math.random() * 10) % 2 = 0)
+            if(Math.floor(Math.random() * 10) % 2 == 0)
                 this.triggerPower();
         };
 
@@ -402,5 +402,15 @@ class SudokuScreen {
 
     triggerPower(){
         // TODO
+    }
+
+    blockNumber(){
+        let randomRow = Math.floor(Math.random() * 9);
+        let randomCol = Math.floor(Math.random() * 9);
+
+        if(!this.grid[randomRow][randomCol].block)
+            this.grid[randomRow][randomCol].block = true;
+        else
+            this.blockNumber();
     }
 }
