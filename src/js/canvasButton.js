@@ -20,6 +20,7 @@ class CanvasButton extends CanvasObject {
         this.text = text;
         this.font = font;
         this.properties = {backgroundColor: "#FFFFFF", overBackgroundColor: "#DDDDDD", clickedBackgroundColor: "#AAAAAA"}
+        this.blocked = false;
     }
 
     draw(canvasCtx) {
