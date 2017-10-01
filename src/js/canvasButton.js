@@ -1,3 +1,17 @@
+/*!
+ * Electron Sodoku <https://github.com/JettTeixeira/electron-sudoku>
+ * 
+ * @name      CanvasButton
+ * @version   v1.0
+ * @copyright Copyright (c) 2017 Leonardo Alfaro, Luis Callo Milla, Jett Teixeira
+ * @license   MIT Licensed
+ * 
+ * DESCRIPTION
+ * ===========
+ * 
+ * Button canvas object.
+ * 
+ */
 
 class CanvasButton extends CanvasObject {
 

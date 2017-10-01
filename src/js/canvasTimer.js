@@ -16,7 +16,7 @@
 class CanvasTimer extends CanvasObject {
 
     /**
-     * 
+     * Create Canvas Timer
      * @param {Integer} x X position in canvas
      * @param {Integer} y Y position in canvas
      * @param {Integer} width Width of object
@@ -121,35 +121,37 @@ class CanvasTimer extends CanvasObject {
         return ('0'+Math.floor(this.current/60)).slice(-2) + ':' + ('0'+this.current%60).slice(-2);
     }
 
+    /**
+     * Draw object
+     * @param {Object} canvasCtx Canvas Context to draw
+     */
     draw(canvasCtx) {
 
+        // Layer 1: Black rectangle (Border)
         canvasCtx.fillStyle = "#000000";
+        canvasCtx.fillRect(this.x,this.y, this.width, this.height);
 
-        canvasCtx.beginPath();
-        canvasCtx.rect(this.x,this.y, this.width, this.height);
-        canvasCtx.fill();
-
+        // Layer 2: White rectangle (Background)
         canvasCtx.fillStyle = "#FFFFFF";
+        canvasCtx.fillRect(this.x+2,this.y+2, this.width-4, this.height-4);
 
-        canvasCtx.beginPath();
-        canvasCtx.rect(this.x+2,this.y+2, this.width-4, this.height-4);
-        canvasCtx.fill();
-
+        // Layer 3: Timer Text (Counter)
         canvasCtx.fillStyle = "#000000";
-
         canvasCtx.font = "25px Courier New bold";
         canvasCtx.textAlign="center";
         canvasCtx.textBaseline="bottom"; 
-
         canvasCtx.fillText(this.getTextFormat(),this.x+this.width/2,this.y+this.height);
 
+        // Set font properties for measure header text
         canvasCtx.font = "12px Tahoma";
         canvasCtx.textAlign="left";
         canvasCtx.textBaseline="middle"; 
 
+        // Layer 4: White rectangle (Delete border for header text)
         canvasCtx.fillStyle = "#FFFFFF";
         canvasCtx.fillRect(this.x+4,this.y, canvasCtx.measureText(this.text).width+3, 2);
 
+        // Layer 5: Header text (Title text)
         canvasCtx.fillStyle = "#000000";
         canvasCtx.fillText(this.text,this.x+5,this.y);        
     }
