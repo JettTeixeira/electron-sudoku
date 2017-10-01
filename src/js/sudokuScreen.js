@@ -70,6 +70,7 @@ class SudokuScreen {
 
                 sudokuNumber.onMouseUp = () => {
                     sudokuNumber.setValue(this.currentNumber.text);
+                    this.highlightInvalidCells((sudokuNumber.y - 72) / 50, (sudokuNumber.x - 177) / 50, sudokuNumber.getValue());
                 }
                 
                 row.push(sudokuNumber);
@@ -340,5 +341,36 @@ class SudokuScreen {
                     return [i, j];
         
         return false;
+    }
+    
+    highlightInvalidCells(row, col, number){
+        let length = this.tempGrid.length;
+        let width = Math.sqrt(length);
+
+        for(let i = 0; i < length; ++i)
+            if(i !== col && this.tempGrid[row][i] === number)
+                this.grid[row][i].isCollision = this.grid[row][i].getValue() == 0 ? false : true;
+            else
+                this.grid[row][i].isCollision = false;
+
+        for(let i = 0; i < length; ++i)
+            if(i !== row && this.tempGrid[i][col] === number)
+                this.grid[i][col].isCollision = this.grid[i][col].getValue() == 0 ? false : true;
+            else
+                this.grid[i][col].isCollision = false;
+
+        let limit_x = width * Math.floor(row / width);
+        let limit_y = width * Math.floor(col / width);
+
+        for(let i = 0; i < width; ++i)
+            for(let j = 0; j < width; ++j){
+                if(limit_x + i == row && limit_y + j == col)
+                    continue;
+
+                if(this.tempGrid[limit_x + i][limit_y + j] === number)
+                    this.grid[limit_x + i][limit_y + j].isCollision = this.grid[limit_x + i][limit_y + j].getValue() == 0 ? false : true;
+                else
+                    this.grid[limit_x + i][limit_y + j].isCollision = false;
+            }
     }
 }
