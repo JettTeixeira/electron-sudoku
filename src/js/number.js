@@ -5,6 +5,7 @@ class SudokuNumber extends CanvasObject {
         super(x, y, width, height);
         this.value = value;
         this.block = false;
+        this.isCollision = false;
         this.possibleValues = [1,2,3,4,5,6,7,8,9];
         this.userMark = [];
     }
@@ -61,7 +62,9 @@ class SudokuNumber extends CanvasObject {
 
     draw(canvasCtx) {
 
-        if (this.block)
+        if(this.isCollision)
+            canvasCtx.fillStyle = "#d80404";
+        else if (this.block)
             canvasCtx.fillStyle = "#666666";
         else
             canvasCtx.fillStyle = "#FFFFFF";
