@@ -73,7 +73,7 @@ class SudokuNumber extends CanvasObject {
         canvasCtx.fill();
 
         canvasCtx.fillStyle = "#000000";
-        canvasCtx.font= "Tahoma 15";
+        canvasCtx.font= "30px Tahoma";
         canvasCtx.textAlign="center";
         canvasCtx.textBaseline="middle"; 
 

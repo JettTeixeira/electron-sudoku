@@ -16,6 +16,11 @@ class SudokuScreen {
         this.currentNumber = null;
         this.properties = properties;
         this.eventManager = eventManager;
+        
+        this.globalTimer = new CanvasTimer(200,15,100,40,"Timer:",this.properties.timer);
+        this.blockUpTimer = new CanvasTimer(350,15,100,40,"PC Turn:",this.properties.blockUpTimer);
+        this.blockUpPowerDuration = new CanvasTimer(500,15,100,40,"PC Power:",0);
+        
 
         this.generateGrid();
         this.generateNumbers();
@@ -27,6 +32,7 @@ class SudokuScreen {
             this.findSolutions();
             console.log(this.solutions);
     }
+
 
     generateGrid() {
 
@@ -196,6 +202,10 @@ class SudokuScreen {
         this.grid.forEach(r => r.forEach(e => e.draw(canvasCtx)));
 
         this.numbersBtn.forEach(e => e.draw(canvasCtx));
+
+        this.globalTimer.draw(canvasCtx);
+        this.blockUpTimer.draw(canvasCtx);
+        this.blockUpPowerDuration.draw(canvasCtx);
     }
 
     handleEvent(event, x, y) {
