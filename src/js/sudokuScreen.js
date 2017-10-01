@@ -31,8 +31,11 @@ class SudokuScreen {
         if(this.properties['errores'])
             this.findSolutions();
             console.log(this.solutions);
-    }
 
+        this.globalTimer.initTimer();
+        this.blockUpTimer.initTimer();
+        //this.globalTimer.initTimer();
+    }
 
     generateGrid() {
 

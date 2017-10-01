@@ -6,10 +6,36 @@ class CanvasTimer extends CanvasObject {
         this.default = value;
         this.current = this.default;
         this.text = text;
+        this.invertal = null;
     }
+
+    initTimer() {
+        
+        if (this.invertal !== null)
+            return;
+        
+       this.invertal = setInterval(()=>{this.tick();},1000);
+    }
+
+    stopTimer() {
+        
+        if (this.interval === null)
+            return;
+        
+        clearInterval(this.invertal);
+        this.invertal = null;
+    }
+
+    eventTimer() {}
 
     tick() {
         --this.current;
+
+        if (this.current >= 0)
+            return;
+
+        this.reset();
+        this.eventTimer();
     }
 
     reset() {
