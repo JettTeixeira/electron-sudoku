@@ -18,7 +18,7 @@ class MainScreen {
                 blockUpTimer:60,
                 blockUpPowerDuration:15,
                 clues:40,
-                errores:true
+                errors:true
             });
         };
 
@@ -28,7 +28,7 @@ class MainScreen {
                 blockUpTimer:60,
                 blockUpPowerDuration:30,
                 clues:30,
-                errores:false
+                errors:false
             });
         };
 
@@ -38,7 +38,7 @@ class MainScreen {
                 blockUpTimer:30,
                 blockUpPowerDuration:30,
                 clues:30,
-                errores:false
+                errors:false
             });
         };
 
