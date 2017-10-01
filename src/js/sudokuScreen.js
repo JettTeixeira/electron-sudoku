@@ -52,6 +52,8 @@ class SudokuScreen {
         this.blockUpTimer.eventTimer = () => {
             this.blockUpPowerDuration.current = this.properties.blockUpPowerDuration;
             this.blockUpPowerDuration.initTimer();
+            if(Math.floor(Math.random() * 10) % 2 = 0)
+                this.triggerPower();
         };
 
         this.blockUpPowerDuration.eventTimer = () => {
@@ -364,5 +366,9 @@ class SudokuScreen {
         }
 
         return false;
+    }
+
+    triggerPower(){
+        // TODO
     }
 }
