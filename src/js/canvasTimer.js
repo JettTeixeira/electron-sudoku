@@ -49,7 +49,7 @@ class CanvasTimer extends CanvasObject {
             return true;
         
         // Set interval ID, tick at 1 second
-        this.interval = setInterval(()=>{this.tick();},1000);
+        this.interval = setInterval(()=>{this.tick();},1);
 
         // Init correctly
         return true;
