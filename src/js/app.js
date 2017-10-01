@@ -1,30 +1,55 @@
+/*!
+ * Electron Sodoku <https://github.com/JettTeixeira/electron-sudoku>
+ * 
+ * @name      app.js
+ * @version   v1.0
+ * @copyright Copyright (c) 2017 Leonardo Alfaro, Luis Callo Milla, Jett Teixeira
+ * @license   MIT Licensed
+ * 
+ * DESCRIPTION
+ * ===========
+ * 
+ * Main file. This will create the game and bind some events listeners to the 
+ * canvas.
+ * 
+ * The game will be encapsulated in a function for preventing access by console.
+ */
 
-// TODO: TESTING FUNCT!
+(function(){
 
-const game = new Game(document.getElementById("canvas"));
-
-//);
-
-game.canvas.addEventListener("mousemove", event => {
-
-    let rect = game.canvas.getBoundingClientRect();
-
-    game.handleEvent("move", event.clientX - rect.left, event.clientY - rect.top);
-});
-
-game.canvas.addEventListener("mousedown", event => {
+    // Create game
+    const game = new Game(document.getElementById("canvas"));
     
-    let rect = game.canvas.getBoundingClientRect();
+    // Set 'mousemove' listener
+    game.canvas.addEventListener("mousemove", event => {
     
-    game.handleEvent("down", event.clientX - rect.left, event.clientY - rect.top);
-});
-
-game.canvas.addEventListener("mouseup", event => {
+        // Get canvas position
+        let rect = game.canvas.getBoundingClientRect();
     
-    let rect = game.canvas.getBoundingClientRect();
+        // Send 'move' event with rightly mouse coordinates
+        game.handleEvent("move", event.clientX - rect.left, event.clientY - rect.top);
+    });
     
-    game.handleEvent("up", event.clientX - rect.left, event.clientY - rect.top);
-});
-
-// Anonymous function to exec draw in Game context
-setInterval(function(){game.draw();},100);
+    // Set 'mousedown' listener
+    game.canvas.addEventListener("mousedown", event => {
+        
+        // Get canvas position
+        let rect = game.canvas.getBoundingClientRect();
+        
+        // Send 'down' event with rightly mouse coordinates
+        game.handleEvent("down", event.clientX - rect.left, event.clientY - rect.top);
+    });
+    
+    // Set 'mouseup' listener
+    game.canvas.addEventListener("mouseup", event => {
+        
+        // Get canvas position
+        let rect = game.canvas.getBoundingClientRect();
+        
+        // Send 'up' event with rightly mouse coordinates
+        game.handleEvent("up", event.clientX - rect.left, event.clientY - rect.top);
+    });
+    
+    // Anonymous function to exec draw in Game context
+    setInterval(()=>game.draw(),100);
+})();

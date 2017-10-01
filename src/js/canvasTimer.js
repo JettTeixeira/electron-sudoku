@@ -155,5 +155,4 @@ class CanvasTimer extends CanvasObject {
         canvasCtx.fillStyle = "#000000";
         canvasCtx.fillText(this.text,this.x+5,this.y);        
     }
-
 }

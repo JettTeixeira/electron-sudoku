@@ -12,7 +12,7 @@ let mainWindow = null;
 function createWindow() {
 
     // Create window
-    mainWindow = new Electron.BrowserWindow({width: 800, height: 600, minWidth: 800, minHeight: 600, title:"Sudoku"});
+    mainWindow = new Electron.BrowserWindow({width: 800, height: 600, minWidth: 800, minHeight: 600, maxWidth: 800, maxHeight: 600, title:"SuDoKu"});
 
     // Load the html
     mainWindow.loadURL(Url.format({
