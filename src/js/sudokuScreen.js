@@ -55,30 +55,29 @@ class SudokuScreen {
             this.swapGroups(Math.floor(Math.random()*3),Math.floor(Math.random()*3,Math.random()*3));
             this.rotateChess();
         }
-        
-        // Delete and block
-        let i = 0;
+
         let current = 0;
         let max = 81/this.properties.clues;
-        let block =  Math.floor(max) - Math.floor(Math.random() * Math.ceil(81/this.properties.clues));//Math.floor(Math.random() * Math.ceil(81/this.properties.clues));
-console.log(++i,block,max);
-        while(current < 81) {
+        let block = Math.floor(Math.random() * Math.round(max));
 
-            if(current>=max) {
+        while (current < 81) {
+
+            if (current >= Math.round(max)) {
+                block = Math.floor(Math.random() * (Math.round(max+81/this.properties.clues) - Math.round(max)) + Math.round(max));
                 max += 81/this.properties.clues;
-                block = Math.floor(max) - Math.floor(Math.random() * Math.ceil(81/this.properties.clues));
-                //console.log(++i,block,Math.floor(max));
             }
 
             let sudokuNumber = this.grid[Math.floor(current/9)][current%9];
-
+            
             if (current == block)
                 sudokuNumber.block = true;
             else
-               sudokuNumber.value = 0;
+                sudokuNumber.value = 0;
 
             ++current;
+
         }
+        console.log("YAY");
     }
 
     swapNumbers(from, to) {
