@@ -68,6 +68,16 @@ $ npm run package-win   # Only build Windows
 $ npm run package-linux # Only build Linux
 ```
 
+## Web View
+
+You can open the file on:
+
+```sh
+/src/main.html
+```
+
+In any browser for see it in web
+
 # Members
 
 - Alfaro Carrasco, Leonardo Daniel
