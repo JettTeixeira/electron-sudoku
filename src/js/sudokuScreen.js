@@ -17,7 +17,7 @@ class SudokuScreen {
         this.properties = properties;
         this.eventManager = eventManager;
         
-        this.globalTimer = new CanvasTimer(200,15,100,40,"Timer:",this.properties.globalTimer);
+        this.globalTimer = new CanvasTimer(200,15,100,40,"Timer:",this.properties.timer);
         this.blockUpTimer = new CanvasTimer(350,15,100,40,"PC Turn:",this.properties.blockUpTimer);
         this.blockUpPowerDuration = new CanvasTimer(500,15,100,40,"PC Power:",0);
         
@@ -337,6 +337,89 @@ class SudokuScreen {
         for(let i = 0; i < length; ++i)
             for(let j = 0; j < length; ++j)
                 if(this.tempGrid[i][j] === 0)
+                    return [i, j];
+        
+        return false;
+    }
+
+    _findSolutions(rawGrid, solutions = []) {
+
+        let emptyCell = this._findEmptyCell(rawGrid);
+
+        if (!emptyCell) {
+            //copy
+            console.log("DOIT!");
+            let tmpGrid = rawGrid.map(arr => arr.slice());
+            solutions.push(tmpGrid);
+            return solutions;
+        }
+
+        let row = emptyCell[0];
+        let col = emptyCell[1];
+        //console.log(row,col);
+        for(let n = 1; n <= 9; ++n) {
+            if (!this._isValid(rawGrid, row, col, n))
+                continue;
+
+            rawGrid[row][col] = n;
+            
+            this._findSolutions(rawGrid, solutions);
+            
+            rawGrid[row][col] = 0;
+        }
+
+        return solutions;
+    }
+
+    _isValid(rawGrid, row, col, number) {
+        let length = rawGrid.length;
+        let width = Math.sqrt(length);
+
+        for(let i = 0; i < length; ++i)
+            if(i !== col && rawGrid[row][i] === number)
+                return false;
+
+        for(let i = 0; i < length; ++i)
+            if(i !== row && rawGrid[i][col] === number)
+                return false;
+
+        let limit_x = width * Math.floor(row / width);
+        let limit_y = width * Math.floor(col / width);
+
+        for(let i = 0; i < width; ++i)
+        for(let j = 0; j < width; ++j){
+            if(limit_x + i == row && limit_y + j == col)
+                continue;
+
+            if(rawGrid[limit_x + i][limit_y + j] === number)
+                return false;
+        }
+
+        return true;
+    }
+
+    _generateRawGrid() {
+
+        let rawGrid = [];
+        
+        for(let row of this.grid){
+            let rawRow = [];
+
+            for(let number of row)
+                rawRow.push(number.getValue());
+
+            rawGrid.push(rawRow);
+        }
+
+        return rawGrid;
+    }
+
+    _findEmptyCell(rawGrid) {
+        let length = rawGrid.length;
+        
+        for(let i = 0; i < length; ++i)
+            for(let j = 0; j < length; ++j)
+                if(rawGrid[i][j] === 0)
                     return [i, j];
         
         return false;
