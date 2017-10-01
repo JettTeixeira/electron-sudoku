@@ -134,7 +134,7 @@ class CanvasObject {
     /**
      * Draw the object in the canvas
      * @virtual
-     * @param {*} canvasCtx Canvas Context to draw
+     * @param {Object} canvasCtx Canvas Context to draw
      * @returns {Boolean} Drawn correctly
      */
     draw(canvasCtx) {}
