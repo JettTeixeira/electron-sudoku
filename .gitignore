@@ -9,6 +9,12 @@ desktop.ini
 
 # Ubuntu files
 
+# node files
+package-lock.json
+
+# VS files
+.vscode/
+
 # Dependency directories
 node_modules/
 jspm_packages/
@@ -22,5 +28,3 @@ yarn-error.log*
 
 # Builds
 release-builds/
-
-package-lock.json
